@@ -6,9 +6,10 @@
 .top b{flex:1}.top a{color:#fee500;font-weight:700;text-decoration:none;font-size:13px}
 .pin{width:30px;height:22px;border-radius:5px;color:#fff;font:700 11px system-ui;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.4)}
 .p1{background:#e3262f}.p2{background:#1f5fd6}.dn{opacity:.55}.dn:after{content:"✕";position:absolute;color:#e11d2a;font-size:22px;font-weight:900;text-shadow:0 0 2px #fff}
-.loc{position:absolute;z-index:1000;right:10px;bottom:28px;width:52px;height:52px;border-radius:50%;border:0;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.35);color:#1a73e8;font-size:13px;font-weight:700}
+.loc{position:absolute;z-index:1000;right:10px;bottom:28px;width:52px;height:52px;border-radius:50%;border:0;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.35);color:#e11d2a;font-size:13px;font-weight:700}
 .msg{position:absolute;z-index:1000;left:10px;right:74px;bottom:30px;background:rgba(18,35,61,.92);color:#fff;border-radius:9px;padding:8px 10px;font-size:13px;display:none}
 .pp a{display:block;margin-top:6px;padding:8px;border-radius:8px;background:#fee500;color:#000;text-align:center;font-weight:700;text-decoration:none}
+.me{position:relative}.me i{position:absolute;left:-11px;top:-11px;width:22px;height:22px;border-radius:50%;background:#ff1a1a;border:3px solid #fff;box-shadow:0 0 0 2px #ff1a1a,0 2px 8px rgba(0,0,0,.5)}.me i:before{content:'';position:absolute;inset:-14px;border-radius:50%;border:3px solid #ff1a1a;animation:pl 1.6s infinite}@keyframes pl{0%{transform:scale(.4);opacity:1}100%{transform:scale(1.6);opacity:0}}.me b{position:absolute;left:16px;top:-10px;white-space:nowrap;background:#ff1a1a;color:#fff;font:700 11px system-ui;padding:2px 6px;border-radius:5px;box-shadow:0 1px 4px rgba(0,0,0,.4)}
 .wm{position:absolute;z-index:999;left:6px;bottom:4px;font:700 10px system-ui;color:rgba(31,51,82,.6);pointer-events:none}</style></head><body>
 <div id="m"></div><div class="top"><b>금호강 42공 · 현위치</b><a href="https://claude.ai/artifact/TfrZpVXBWjavgRRRR14ciX">← 위치도</a></div>
 <button class="loc" id="loc">현위치</button><div class="msg" id="msg"></div><div class="wm">© 월천이앤지 · 무단복제·배포 금지</div>
@@ -23,7 +24,7 @@ map.fitBounds(B,{padding:[30,30]});
 let dot=null,acc=null,first=true;const msg=t=>{const m=document.getElementById('msg');m.innerHTML=t;m.style.display=t?'block':'none'};
 function start(){if(!navigator.geolocation){msg('이 기기에서는 위치 기능을 쓸 수 없습니다.');return}msg('현위치 찾는 중…');
  navigator.geolocation.watchPosition(p=>{msg('');const ll=[p.coords.latitude,p.coords.longitude],a=p.coords.accuracy||30;
-  if(!dot){acc=L.circle(ll,{radius:a,color:'#1a73e8',weight:1,fillOpacity:.12,interactive:false}).addTo(map);dot=L.circleMarker(ll,{radius:9,color:'#fff',weight:3,fillColor:'#1a73e8',fillOpacity:1}).addTo(map)}else{dot.setLatLng(ll);acc.setLatLng(ll).setRadius(a)}
+  if(!dot){acc=L.circle(ll,{radius:a,color:'#e11d2a',weight:1,fillColor:'#e11d2a',fillOpacity:.10,interactive:false}).addTo(map);dot=L.marker(ll,{zIndexOffset:3000,interactive:false,icon:L.divIcon({className:'',html:'<div class="me"><i></i><b>내 위치</b></div>',iconSize:[0,0],iconAnchor:[0,0]})}).addTo(map)}else{dot.setLatLng(ll);acc.setLatLng(ll).setRadius(a)}
   if(first){map.setView(ll,15);first=false}},e=>msg(e.code===1?'위치 권한이 꺼져 있습니다. 휴대폰 설정에서 이 브라우저의 위치 권한을 허용해 주세요.':'현위치를 찾지 못했습니다.'),{enableHighAccuracy:true,maximumAge:5000,timeout:20000})}
 document.getElementById('loc').onclick=()=>{if(dot){first=false;map.setView(dot.getLatLng(),Math.max(map.getZoom(),15))}else{first=true;start()}};
 start();
