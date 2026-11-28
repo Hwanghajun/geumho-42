@@ -345,7 +345,7 @@ function init(){
   map.on('zoomend viewreset',refreshOL);setTimeout(refreshOL,0);
   map.createPane('topo');map.getPane('topo').style.zIndex=250;map.getPane('topo').style.pointerEvents='none';
   const topoImg=L.imageOverlay('opentopomap_geumho.jpg',[TB.nw,TB.se],{pane:'topo',attribution:'지형도 © OpenTopoMap (CC-BY-SA) · © OpenStreetMap 기여자'});
-  topoImg.on('error',()=>{document.getElementById('notice').style.display='block'});
+  topoImg.on('error',()=>{try{map.removeLayer(topoImg)}catch(e){}if(!map.hasLayer(live))live.addTo(map)});
   const live=L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',{pane:'topo',maxZoom:17,subdomains:'abc',attribution:'지형도 © OpenTopoMap (CC-BY-SA) · © OpenStreetMap'});
   topoImg.addTo(map);
   L.control.layers({'OpenTopoMap 지형도':topoImg,'OpenTopoMap 실시간 (PC 파일에서 확대용)':live},null,{collapsed:true,position:'topright'}).addTo(map);
